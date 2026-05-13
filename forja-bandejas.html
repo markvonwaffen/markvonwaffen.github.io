@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORJA · Bandeja Paramétrica</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;0,6..96,900;1,6..96,400&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0d0c;
+    --bg-panel: #161614;
+    --bg-elev: #1d1d1a;
+    --ink: #f5f1e8;
+    --ink-dim: #8a857a;
+    --accent: #d4ff3a;
+    --accent-warm: #ff7a3d;
+    --line: #2a2a26;
+    --grid: rgba(212, 255, 58, 0.06);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    height: 100%;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    overflow: hidden;
+  }
+
+  body {
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 32px 32px;
+    background-position: -1px -1px;
+  }
+
+  .app {
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    height: 100vh;
+  }
+
+  /* ============ SIDEBAR ============ */
+  aside {
+    background: var(--bg-panel);
+    border-right: 1px solid var(--line);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .brand {
+    padding: 28px 24px 20px;
+    border-bottom: 1px solid var(--line);
+  }
+  .brand h1 {
+    font-family: 'Bodoni Moda', serif;
+    font-weight: 900;
+    font-size: 38px;
+    line-height: 0.9;
+    letter-spacing: -1px;
+    font-style: italic;
+  }
+  .brand h1 .dot { color: var(--accent); font-style: normal; }
+  .brand .sub {
+    margin-top: 6px;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+  }
+
+  .group {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--line);
+  }
+  .group-title {
+    font-size: 9px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .group-title::before {
+    content: '';
+    width: 8px; height: 8px;
+    background: var(--accent);
+    display: inline-block;
+  }
+
+  .field {
+    margin-bottom: 14px;
+  }
+  .field:last-child { margin-bottom: 0; }
+
+  .field label {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 6px;
+  }
+  .field label .name {
+    font-size: 11px;
+    color: var(--ink);
+    letter-spacing: 0.5px;
+  }
+  .field label .val {
+    font-family: 'Bodoni Moda', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--accent);
+    font-feature-settings: 'tnum';
+  }
+  .field label .unit {
+    font-size: 9px;
+    color: var(--ink-dim);
+    margin-left: 2px;
+  }
+
+  input[type="range"] {
+    width: 100%;
+    appearance: none;
+    background: transparent;
+    height: 20px;
+    cursor: pointer;
+  }
+  input[type="range"]::-webkit-slider-runnable-track {
+    height: 2px;
+    background: var(--line);
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    appearance: none;
+    width: 14px; height: 14px;
+    background: var(--accent);
+    border-radius: 50%;
+    margin-top: -6px;
+    transition: transform .15s;
+  }
+  input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.4); }
+  input[type="range"]::-moz-range-track { height: 2px; background: var(--line); }
+  input[type="range"]::-moz-range-thumb {
+    width: 14px; height: 14px;
+    background: var(--accent);
+    border: none;
+    border-radius: 50%;
+  }
+
+  .actions {
+    padding: 20px 24px;
+    margin-top: auto;
+    border-top: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  button {
+    font-family: inherit;
+    border: none;
+    cursor: pointer;
+    padding: 14px 18px;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 700;
+    transition: all .2s;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: var(--bg);
+  }
+  .btn-primary:hover {
+    background: var(--ink);
+    transform: translateX(2px);
+  }
+  .btn-secondary {
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--line);
+  }
+  .btn-secondary:hover {
+    border-color: var(--accent-warm);
+    color: var(--accent-warm);
+  }
+  button .arrow { font-family: 'Bodoni Moda', serif; font-size: 18px; font-weight: 400; font-style: italic; text-transform: none; letter-spacing: 0; }
+
+  /* ============ VIEWER ============ */
+  main {
+    position: relative;
+    background:
+      radial-gradient(ellipse at 30% 20%, #1a1a16 0%, var(--bg) 60%);
+    overflow: hidden;
+  }
+
+  #canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .viewer-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    padding: 24px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  .stats {
+    background: rgba(13,13,12,0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--line);
+    padding: 12px 18px;
+    font-size: 10px;
+    line-height: 1.8;
+    letter-spacing: 1px;
+    color: var(--ink-dim);
+    pointer-events: auto;
+  }
+  .stats b {
+    color: var(--ink);
+    font-weight: 400;
+    font-family: 'Bodoni Moda', serif;
+    font-size: 14px;
+    margin-left: 8px;
+  }
+
+  .badge {
+    background: rgba(13,13,12,0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--line);
+    padding: 8px 14px;
+    font-size: 9px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    pointer-events: auto;
+  }
+  .badge::before {
+    content: '●';
+    color: var(--accent);
+    margin-right: 6px;
+    animation: blink 1.6s infinite;
+  }
+  @keyframes blink { 50% { opacity: 0.2; } }
+
+  .hint {
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+    pointer-events: none;
+    text-align: center;
+  }
+  .hint .key {
+    border: 1px solid var(--line);
+    padding: 2px 6px;
+    margin: 0 4px;
+    color: var(--ink);
+  }
+
+  .corner-mark {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    border: 1px solid var(--accent);
+    pointer-events: none;
+  }
+  .corner-mark.tl { top: 12px; left: 12px; border-right: none; border-bottom: none; }
+  .corner-mark.tr { top: 12px; right: 12px; border-left: none; border-bottom: none; }
+  .corner-mark.bl { bottom: 12px; left: 12px; border-right: none; border-top: none; }
+  .corner-mark.br { bottom: 12px; right: 12px; border-left: none; border-top: none; }
+
+  /* scrollbar */
+  aside::-webkit-scrollbar { width: 6px; }
+  aside::-webkit-scrollbar-track { background: transparent; }
+  aside::-webkit-scrollbar-thumb { background: var(--line); }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <aside>
+    <div class="brand">
+      <h1>Forja<span class="dot">.</span></h1>
+      <div class="sub">Bandeja paramétrica · v2</div>
+    </div>
+
+    <div class="group">
+      <div class="group-title">Dimensiones</div>
+      <div class="field">
+        <label><span class="name">Largo</span><span><span class="val" id="largo-v">150</span><span class="unit">mm</span></span></label>
+        <input type="range" id="largo" min="40" max="300" step="1" value="150">
+      </div>
+      <div class="field">
+        <label><span class="name">Ancho</span><span><span class="val" id="ancho-v">100</span><span class="unit">mm</span></span></label>
+        <input type="range" id="ancho" min="40" max="300" step="1" value="100">
+      </div>
+      <div class="field">
+        <label><span class="name">Alto</span><span><span class="val" id="alto-v">30</span><span class="unit">mm</span></span></label>
+        <input type="range" id="alto" min="0" max="120" step="1" value="30">
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="group-title">Construcción</div>
+      <div class="field">
+        <label><span class="name">Pared</span><span><span class="val" id="pared-v">2.5</span><span class="unit">mm</span></span></label>
+        <input type="range" id="pared" min="1" max="8" step="0.1" value="2.5">
+      </div>
+      <div class="field">
+        <label><span class="name">Base</span><span><span class="val" id="base-v">2.0</span><span class="unit">mm</span></span></label>
+        <input type="range" id="base" min="1" max="8" step="0.1" value="2.0">
+      </div>
+      <div class="field">
+        <label><span class="name">Esquinas</span><span><span class="val" id="radio-v">8</span><span class="unit">mm</span></span></label>
+        <input type="range" id="radio" min="0" max="40" step="0.5" value="8">
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="group-title">Divisores</div>
+      <div class="field">
+        <label><span class="name">En largo</span><span><span class="val" id="divx-v">0</span></span></label>
+        <input type="range" id="divx" min="0" max="6" step="1" value="0">
+      </div>
+      <div class="field">
+        <label><span class="name">En ancho</span><span><span class="val" id="divy-v">0</span></span></label>
+        <input type="range" id="divy" min="0" max="6" step="1" value="0">
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn-primary" id="download">
+        Descargar STL <span class="arrow">→</span>
+      </button>
+      <button class="btn-secondary" id="reset">
+        Reiniciar valores
+      </button>
+    </div>
+  </aside>
+
+  <main>
+    <span class="corner-mark tl"></span>
+    <span class="corner-mark tr"></span>
+    <span class="corner-mark bl"></span>
+    <span class="corner-mark br"></span>
+
+    <div class="viewer-overlay">
+      <div class="stats">
+        VOL <b id="stat-vol">—</b><br>
+        TRI <b id="stat-tri">—</b><br>
+        BBOX <b id="stat-bbox">—</b>
+      </div>
+      <div class="badge" id="mode-badge">Modo bandeja</div>
+    </div>
+
+    <canvas id="canvas"></canvas>
+
+    <div class="hint">
+      <span class="key">Arrastrar</span> Rotar · <span class="key">Rueda</span> Zoom · <span class="key">Shift+Arrastrar</span> Mover
+    </div>
+  </main>
+
+</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { STLExporter } from 'three/addons/exporters/STLExporter.js';
+import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
+
+// ============ THREE.JS SETUP ============
+const canvas = document.getElementById('canvas');
+const scene = new THREE.Scene();
+scene.background = null;
+
+const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 2000);
+camera.position.set(200, 180, 260);
+
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+const controls = new OrbitControls(camera, canvas);
+controls.enableDamping = true;
+controls.dampingFactor = 0.08;
+controls.target.set(0, 15, 0);
+
+// luces
+scene.add(new THREE.AmbientLight(0xffffff, 0.35));
+const key = new THREE.DirectionalLight(0xffffff, 1.2);
+key.position.set(120, 200, 80);
+key.castShadow = true;
+key.shadow.mapSize.set(1024, 1024);
+key.shadow.camera.left = -200;
+key.shadow.camera.right = 200;
+key.shadow.camera.top = 200;
+key.shadow.camera.bottom = -200;
+scene.add(key);
+
+const rim = new THREE.DirectionalLight(0xd4ff3a, 0.4);
+rim.position.set(-100, 50, -100);
+scene.add(rim);
+
+const fill = new THREE.DirectionalLight(0xff7a3d, 0.15);
+fill.position.set(80, -50, 100);
+scene.add(fill);
+
+// piso
+const floorGeo = new THREE.PlaneGeometry(800, 800);
+const floorMat = new THREE.ShadowMaterial({ opacity: 0.4 });
+const floor = new THREE.Mesh(floorGeo, floorMat);
+floor.rotation.x = -Math.PI / 2;
+floor.receiveShadow = true;
+scene.add(floor);
+
+// grid sutil
+const grid = new THREE.GridHelper(600, 30, 0x2a2a26, 0x1a1a16);
+grid.position.y = 0.01;
+scene.add(grid);
+
+// material
+const trayMaterial = new THREE.MeshPhysicalMaterial({
+  color: 0xe8e2d0,
+  roughness: 0.55,
+  metalness: 0.1,
+  clearcoat: 0.2,
+  clearcoatRoughness: 0.6,
+});
+
+let currentMesh = null;
+
+// ============ GEOMETRY GENERATION ============
+function roundedRectShape(w, h, r) {
+  const s = new THREE.Shape();
+  r = Math.min(r, Math.min(w, h) / 2 - 0.01);
+  if (r <= 0) {
+    s.moveTo(-w/2, -h/2);
+    s.lineTo(w/2, -h/2);
+    s.lineTo(w/2, h/2);
+    s.lineTo(-w/2, h/2);
+    s.lineTo(-w/2, -h/2);
+    return s;
+  }
+  s.moveTo(-w/2 + r, -h/2);
+  s.lineTo(w/2 - r, -h/2);
+  s.quadraticCurveTo(w/2, -h/2, w/2, -h/2 + r);
+  s.lineTo(w/2, h/2 - r);
+  s.quadraticCurveTo(w/2, h/2, w/2 - r, h/2);
+  s.lineTo(-w/2 + r, h/2);
+  s.quadraticCurveTo(-w/2, h/2, -w/2, h/2 - r);
+  s.lineTo(-w/2, -h/2 + r);
+  s.quadraticCurveTo(-w/2, -h/2, -w/2 + r, -h/2);
+  return s;
+}
+
+function buildTray(p) {
+  const geos = [];
+
+  // Modo placa: alto <= base -> solo base, sin paredes ni divisores
+  const isPlate = p.alto <= p.base;
+  const baseThickness = isPlate ? Math.max(0.6, p.alto || p.base) : p.base;
+  const wallHeight = isPlate ? 0 : (p.alto - p.base);
+
+  // BASE (siempre)
+  const baseShape = roundedRectShape(p.largo, p.ancho, p.radio);
+  const baseGeo = new THREE.ExtrudeGeometry(baseShape, {
+    depth: baseThickness,
+    bevelEnabled: false,
+    curveSegments: 16,
+  });
+  geos.push(baseGeo);
+
+  // PAREDES + DIVISORES (solo si hay altura real)
+  if (!isPlate && wallHeight > 0.1) {
+    const innerR = Math.max(0.1, p.radio - p.pared);
+    const wallShape = roundedRectShape(p.largo, p.ancho, p.radio);
+    const innerShape = roundedRectShape(p.largo - 2*p.pared, p.ancho - 2*p.pared, innerR);
+    wallShape.holes.push(innerShape);
+    const wallGeo = new THREE.ExtrudeGeometry(wallShape, {
+      depth: wallHeight,
+      bevelEnabled: false,
+      curveSegments: 16,
+    });
+    wallGeo.translate(0, 0, p.base);
+    geos.push(wallGeo);
+
+    // Divisores en X
+    if (p.divx > 0) {
+      const innerW = p.largo - 2*p.pared;
+      const innerH = p.ancho - 2*p.pared;
+      const step = innerW / (p.divx + 1);
+      for (let i = 1; i <= p.divx; i++) {
+        const x = -innerW/2 + i*step;
+        const s = new THREE.Shape();
+        s.moveTo(x - p.pared/2, -innerH/2);
+        s.lineTo(x + p.pared/2, -innerH/2);
+        s.lineTo(x + p.pared/2, innerH/2);
+        s.lineTo(x - p.pared/2, innerH/2);
+        s.lineTo(x - p.pared/2, -innerH/2);
+        const g = new THREE.ExtrudeGeometry(s, { depth: wallHeight, bevelEnabled: false });
+        g.translate(0, 0, p.base);
+        geos.push(g);
+      }
+    }
+    // Divisores en Y
+    if (p.divy > 0) {
+      const innerW = p.largo - 2*p.pared;
+      const innerH = p.ancho - 2*p.pared;
+      const step = innerH / (p.divy + 1);
+      for (let i = 1; i <= p.divy; i++) {
+        const y = -innerH/2 + i*step;
+        const s = new THREE.Shape();
+        s.moveTo(-innerW/2, y - p.pared/2);
+        s.lineTo(innerW/2, y - p.pared/2);
+        s.lineTo(innerW/2, y + p.pared/2);
+        s.lineTo(-innerW/2, y + p.pared/2);
+        s.lineTo(-innerW/2, y - p.pared/2);
+        const g = new THREE.ExtrudeGeometry(s, { depth: wallHeight, bevelEnabled: false });
+        g.translate(0, 0, p.base);
+        geos.push(g);
+      }
+    }
+  }
+
+  const merged = mergeGeometries(geos, false);
+  merged.rotateX(-Math.PI / 2);
+  merged.translate(0, isPlate ? baseThickness : p.alto, 0);
+  merged.computeVertexNormals();
+  return { geometry: merged, isPlate };
+}
+
+function updateMesh() {
+  const p = readParams();
+
+  // limpiar
+  if (currentMesh) {
+    scene.remove(currentMesh);
+    currentMesh.geometry.dispose();
+  }
+
+  const { geometry: geo, isPlate } = buildTray(p);
+  currentMesh = new THREE.Mesh(geo, trayMaterial);
+  currentMesh.castShadow = true;
+  currentMesh.receiveShadow = true;
+  scene.add(currentMesh);
+
+  // habilitar/deshabilitar controles según modo
+  toggleControl('pared', !isPlate);
+  toggleControl('divx',  !isPlate);
+  toggleControl('divy',  !isPlate);
+  document.getElementById('mode-badge').textContent = isPlate ? 'Modo placa' : 'Modo bandeja';
+
+  // stats
+  const tri = geo.index ? geo.index.count / 3 : geo.attributes.position.count / 3;
+  const altoReal = isPlate ? Math.max(0.6, p.alto || p.base) : p.alto;
+  const volExt = p.largo * p.ancho * altoReal / 1000;
+  document.getElementById('stat-vol').textContent = volExt.toFixed(1) + ' cm³';
+  document.getElementById('stat-tri').textContent = Math.round(tri).toLocaleString();
+  document.getElementById('stat-bbox').textContent = `${p.largo}×${p.ancho}×${altoReal}`;
+
+  controls.target.set(0, altoReal / 2, 0);
+}
+
+function toggleControl(id, enabled) {
+  const el = document.getElementById(id);
+  const field = el.closest('.field');
+  el.disabled = !enabled;
+  if (field) field.style.opacity = enabled ? '1' : '0.35';
+}
+
+function readParams() {
+  return {
+    largo: parseFloat(document.getElementById('largo').value),
+    ancho: parseFloat(document.getElementById('ancho').value),
+    alto:  parseFloat(document.getElementById('alto').value),
+    pared: parseFloat(document.getElementById('pared').value),
+    base:  parseFloat(document.getElementById('base').value),
+    radio: parseFloat(document.getElementById('radio').value),
+    divx:  parseInt(document.getElementById('divx').value),
+    divy:  parseInt(document.getElementById('divy').value),
+  };
+}
+
+// ============ UI WIRING ============
+const inputs = ['largo','ancho','alto','pared','base','radio','divx','divy'];
+inputs.forEach(id => {
+  const el = document.getElementById(id);
+  const valEl = document.getElementById(id + '-v');
+  el.addEventListener('input', () => {
+    const v = el.step.includes('.') ? parseFloat(el.value).toFixed(1) : el.value;
+    valEl.textContent = v;
+    updateMesh();
+  });
+});
+
+document.getElementById('reset').addEventListener('click', () => {
+  const defaults = { largo:150, ancho:100, alto:30, pared:2.5, base:2.0, radio:8, divx:0, divy:0 };
+  for (const [k,v] of Object.entries(defaults)) {
+    document.getElementById(k).value = v;
+    const s = document.getElementById(k).step;
+    document.getElementById(k+'-v').textContent = s.includes('.') ? v.toFixed(1) : v;
+  }
+  updateMesh();
+});
+
+document.getElementById('download').addEventListener('click', () => {
+  if (!currentMesh) return;
+  const exporter = new STLExporter();
+  const stl = exporter.parse(currentMesh, { binary: true });
+  const blob = new Blob([stl], { type: 'application/octet-stream' });
+  const url = URL.createObjectURL(blob);
+  const p = readParams();
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `bandeja_${p.largo}x${p.ancho}x${p.alto}_r${p.radio}.stl`;
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+// ============ RENDER LOOP ============
+function resize() {
+  const r = canvas.getBoundingClientRect();
+  renderer.setSize(r.width, r.height, false);
+  camera.aspect = r.width / r.height;
+  camera.updateProjectionMatrix();
+}
+window.addEventListener('resize', resize);
+resize();
+
+function animate() {
+  controls.update();
+  renderer.render(scene, camera);
+  requestAnimationFrame(animate);
+}
+
+updateMesh();
+animate();
+</script>
+</body>
+</html>
