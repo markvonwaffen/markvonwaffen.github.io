@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Forja · Guía de código</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,700;1,6..96,400&family=JetBrains+Mono:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d0d0c;
+  --bg-panel: #131311;
+  --bg-elev: #1a1a17;
+  --ink: #f0ebe0;
+  --ink-dim: #7a756a;
+  --ink-mid: #b0aa9e;
+  --accent: #d4ff3a;
+  --accent-warm: #ff7a3d;
+  --accent-blue: #3ab8ff;
+  --accent-pink: #ff5faa;
+  --line: #252520;
+  --line-hi: #353530;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+/* NAV */
+nav {
+  position: fixed;
+  top: 0; left: 0;
+  width: 280px;
+  height: 100vh;
+  background: var(--bg-panel);
+  border-right: 1px solid var(--line);
+  padding: 32px 0;
+  overflow-y: auto;
+  z-index: 100;
+}
+
+.nav-brand {
+  padding: 0 24px 24px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 16px;
+}
+.nav-brand .title {
+  font-family: 'Bodoni Moda', serif;
+  font-style: italic;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1;
+}
+.nav-brand .title span { color: var(--accent); font-style: normal; }
+.nav-brand .sub {
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  margin-top: 4px;
+}
+
+.nav-section {
+  padding: 4px 0;
+}
+.nav-section-title {
+  font-size: 8px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  padding: 8px 24px 4px;
+}
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 24px;
+  color: var(--ink-mid);
+  text-decoration: none;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  transition: all .15s;
+  border-left: 2px solid transparent;
+}
+.nav-link:hover, .nav-link.active {
+  color: var(--ink);
+  border-left-color: var(--accent);
+  background: rgba(212,255,58,0.04);
+}
+.nav-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* MAIN */
+main {
+  margin-left: 280px;
+  padding: 0;
+}
+
+/* HERO */
+.hero {
+  padding: 80px 64px 64px;
+  border-bottom: 1px solid var(--line);
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -100px; right: -100px;
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(212,255,58,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-tag {
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 16px;
+}
+.hero h1 {
+  font-family: 'Bodoni Moda', serif;
+  font-size: 56px;
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: -2px;
+}
+.hero h1 em {
+  font-style: italic;
+  color: var(--ink-dim);
+}
+.hero-desc {
+  margin-top: 20px;
+  max-width: 560px;
+  color: var(--ink-mid);
+  font-size: 13px;
+  line-height: 1.8;
+}
+.hero-meta {
+  display: flex;
+  gap: 32px;
+  margin-top: 32px;
+}
+.meta-item .label {
+  font-size: 8px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  margin-bottom: 4px;
+}
+.meta-item .value {
+  font-family: 'Bodoni Moda', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+/* SECTIONS */
+section {
+  padding: 64px;
+  border-bottom: 1px solid var(--line);
+}
+
+.section-tag {
+  font-size: 8px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-tag::before {
+  content: '';
+  width: 20px; height: 1px;
+  background: var(--accent);
+}
+
+h2 {
+  font-family: 'Bodoni Moda', serif;
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -1px;
+  margin-bottom: 8px;
+}
+h2 em { font-style: italic; color: var(--ink-dim); }
+
+.section-intro {
+  color: var(--ink-mid);
+  max-width: 640px;
+  margin-bottom: 40px;
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+/* BLOQUES */
+.block {
+  background: var(--bg-panel);
+  border: 1px solid var(--line);
+  margin-bottom: 24px;
+  position: relative;
+}
+
+.block-header {
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+  transition: background .15s;
+}
+.block-header:hover { background: var(--bg-elev); }
+
+.block-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.block-num {
+  font-family: 'Bodoni Moda', serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--accent);
+  min-width: 28px;
+}
+.block-name {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.block-tag {
+  font-size: 9px;
+  padding: 2px 8px;
+  border: 1px solid;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.block-arrow {
+  color: var(--ink-dim);
+  font-size: 16px;
+  transition: transform .2s;
+}
+.block.open .block-arrow { transform: rotate(90deg); }
+
+.block-body {
+  display: none;
+}
+.block.open .block-body { display: block; }
+
+.block-desc {
+  padding: 24px;
+  color: var(--ink-mid);
+  line-height: 1.9;
+  border-bottom: 1px solid var(--line);
+  font-size: 13px;
+}
+.block-desc strong { color: var(--ink); font-weight: 700; }
+.block-desc .highlight {
+  color: var(--accent);
+  font-weight: 700;
+}
+.block-desc .highlight-warm { color: var(--accent-warm); font-weight: 700; }
+.block-desc .highlight-blue { color: var(--accent-blue); }
+.block-desc .highlight-pink { color: var(--accent-pink); }
+
+/* CODE */
+.code-block {
+  background: #0a0a09;
+  padding: 24px;
+  overflow-x: auto;
+  position: relative;
+}
+.code-label {
+  position: absolute;
+  top: 12px; right: 16px;
+  font-size: 8px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
+pre {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--ink-mid);
+  white-space: pre;
+}
+.c-comment { color: #4a4a44; font-style: italic; }
+.c-key { color: var(--accent); }
+.c-val { color: var(--accent-warm); }
+.c-str { color: var(--accent-blue); }
+.c-fn { color: var(--accent-pink); }
+.c-num { color: #a8e6a0; }
+
+/* TUNEABLE */
+.tuneable-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--line);
+  border-top: 1px solid var(--line);
+}
+.tuneable-item {
+  background: var(--bg-panel);
+  padding: 20px 24px;
+}
+.tuneable-name {
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 6px;
+}
+.tuneable-desc {
+  font-size: 11px;
+  color: var(--ink-mid);
+  line-height: 1.7;
+}
+.tuneable-example {
+  margin-top: 8px;
+  font-size: 10px;
+  color: var(--ink-dim);
+}
+.tuneable-example code {
+  color: var(--accent-warm);
+}
+
+/* DIAGRAM */
+.diagram {
+  padding: 32px 24px;
+  border-top: 1px solid var(--line);
+}
+.diagram-title {
+  font-size: 8px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  margin-bottom: 20px;
+}
+.flow {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.flow-step {
+  background: var(--bg-elev);
+  border: 1px solid var(--line-hi);
+  padding: 8px 14px;
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--ink-mid);
+}
+.flow-step.hi {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.flow-arrow {
+  color: var(--ink-dim);
+  font-size: 16px;
+}
+
+/* CALLOUT */
+.callout {
+  margin: 24px 0;
+  padding: 16px 20px;
+  border-left: 3px solid var(--accent);
+  background: rgba(212,255,58,0.04);
+  font-size: 12px;
+  color: var(--ink-mid);
+  line-height: 1.8;
+}
+.callout.warm {
+  border-left-color: var(--accent-warm);
+  background: rgba(255,122,61,0.04);
+}
+.callout.blue {
+  border-left-color: var(--accent-blue);
+  background: rgba(58,184,255,0.04);
+}
+.callout strong { color: var(--ink); }
+
+/* TABLE */
+.props-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+  margin: 16px 0;
+}
+.props-table th {
+  text-align: left;
+  padding: 8px 16px;
+  font-size: 8px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  border-bottom: 1px solid var(--line);
+  font-weight: 400;
+}
+.props-table td {
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink-mid);
+  vertical-align: top;
+}
+.props-table td:first-child { color: var(--accent); font-weight: 700; }
+.props-table tr:last-child td { border-bottom: none; }
+
+/* FOOTER */
+footer {
+  padding: 48px 64px;
+  color: var(--ink-dim);
+  font-size: 10px;
+  letter-spacing: 1px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+footer span { color: var(--accent); }
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--line-hi); }
+
+@media (max-width: 900px) {
+  nav { display: none; }
+  main { margin-left: 0; }
+  section, .hero { padding: 40px 24px; }
+  h2 { font-size: 24px; }
+  .tuneable-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">
+    <div class="title">Forja<span>.</span></div>
+    <div class="sub">Guía de código · v2</div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-title">Introducción</div>
+    <a href="#overview" class="nav-link"><span class="nav-dot" style="background:#d4ff3a"></span>Visión general</a>
+    <a href="#stack" class="nav-link"><span class="nav-dot" style="background:#3ab8ff"></span>Stack técnico</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-title">Bloques de código</div>
+    <a href="#css-vars" class="nav-link"><span class="nav-dot" style="background:#ff5faa"></span>01 · Variables CSS</a>
+    <a href="#three-setup" class="nav-link"><span class="nav-dot" style="background:#d4ff3a"></span>02 · Three.js setup</a>
+    <a href="#lights" class="nav-link"><span class="nav-dot" style="background:#ffd700"></span>03 · Iluminación</a>
+    <a href="#material" class="nav-link"><span class="nav-dot" style="background:#a8e6a0"></span>04 · Material</a>
+    <a href="#geometry" class="nav-link"><span class="nav-dot" style="background:#ff7a3d"></span>05 · Geometría</a>
+    <a href="#controls" class="nav-link"><span class="nav-dot" style="background:#3ab8ff"></span>06 · OrbitControls</a>
+    <a href="#ui" class="nav-link"><span class="nav-dot" style="background:#ff5faa"></span>07 · UI y sliders</a>
+    <a href="#stl" class="nav-link"><span class="nav-dot" style="background:#d4ff3a"></span>08 · Exportar STL</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-title">Personalización</div>
+    <a href="#tuneable" class="nav-link"><span class="nav-dot" style="background:#ff7a3d"></span>Qué puedes cambiar</a>
+  </div>
+</nav>
+
+<main>
+
+  <!-- HERO -->
+  <div class="hero" id="overview">
+    <div class="hero-tag">● Guía de código interactiva</div>
+    <h1>Forja<em>.</em><br>Bandeja<br>Paramétrica</h1>
+    <p class="hero-desc">
+      Un archivo HTML que genera modelos 3D descargables como STL. Sin servidor, sin dependencias instaladas, sin base de datos. Todo ocurre en el browser del usuario. Esta guía descompone cada bloque del código, explica por qué está construido así y qué puedes modificar.
+    </p>
+    <div class="hero-meta">
+      <div class="meta-item">
+        <div class="label">Líneas de código</div>
+        <div class="value">670</div>
+      </div>
+      <div class="meta-item">
+        <div class="label">Dependencias</div>
+        <div class="value">1</div>
+      </div>
+      <div class="meta-item">
+        <div class="label">Archivos</div>
+        <div class="value">1</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STACK -->
+  <section id="stack">
+    <div class="section-tag">Arquitectura</div>
+    <h2>Stack <em>técnico</em></h2>
+    <p class="section-intro">
+      La app usa exactamente una librería externa: <strong>Three.js</strong>. Todo lo demás — CSS, lógica, UI, exportación — es JavaScript puro del browser. La única dependencia se carga desde una CDN pública, lo que significa que el archivo funciona offline si ya fue cargado una vez.
+    </p>
+
+    <div class="callout blue">
+      <strong>¿Por qué un solo archivo?</strong><br>
+      Portabilidad total. No hay npm install, no hay build, no hay servidor. Abres el HTML en cualquier browser y funciona. Esto lo hace ideal para herramientas personales y para publicar en GitHub Pages.
+    </div>
+
+    <table class="props-table">
+      <tr><th>Tecnología</th><th>Rol</th><th>Por qué</th></tr>
+      <tr>
+        <td>Three.js 0.160</td>
+        <td>Renderizado 3D, geometría, exportación STL</td>
+        <td>La librería 3D más madura para el browser. Tiene todo lo necesario incluido.</td>
+      </tr>
+      <tr>
+        <td>Import maps</td>
+        <td>Resolver módulos ES sin bundler</td>
+        <td>Permite usar <code>import from 'three'</code> sin npm ni webpack.</td>
+      </tr>
+      <tr>
+        <td>CSS Variables</td>
+        <td>Sistema de diseño</td>
+        <td>Centraliza todos los colores y valores. Cambiar un color cambia toda la app.</td>
+      </tr>
+      <tr>
+        <td>Canvas API</td>
+        <td>Superficie de renderizado</td>
+        <td>Three.js escribe directamente en un elemento canvas del HTML.</td>
+      </tr>
+    </table>
+  </section>
+
+  <!-- 01 CSS VARS -->
+  <section id="css-vars">
+    <div class="section-tag">Bloque 01</div>
+    <h2>Variables <em>CSS</em></h2>
+    <p class="section-intro">
+      Toda la paleta de colores vive aquí. Es el "tema" de la app. Cambiar estos valores cambia el aspecto visual completo sin tocar nada más.
+    </p>
+
+    <div class="block open">
+      <div class="block-header" onclick="toggle(this)">
+        <div class="block-title">
+          <span class="block-num">01</span>
+          <span class="block-name">:root — Sistema de colores</span>
+        </div>
+        <span class="block-arrow">▶</span>
+      </div>
+      <div class="block-body">
+        <div class="block-desc">
+          El selector <strong>:root</strong> define variables globales accesibles en todo el CSS con la sintaxis <span class="highlight">var(--nombre)</span>. Es como declarar constantes en código — si cambias <code>--accent</code> en un lugar, todos los botones, sliders y valores numéricos cambian de color automáticamente.
+          <br><br>
+          El esquema es <span class="highlight-warm">oscuro por diseño</span>: fondos casi negros con un acento verde-lima eléctrico. Este contraste extremo hace que los números y controles resalten sin esfuerzo visual.
+        </div>
+        <div class="code-block">
+          <div class="code-label">CSS</div>
+          <pre><span class="c-key">:root</span> {
+  <span class="c-comment">/* Fondos — tres niveles de profundidad */</span>
+  <span class="c-key">--bg</span>: <span class="c-str">#0d0d0c</span>;        <span class="c-comment">/* Fondo principal — casi negro */</span>
+  <span class="c-key">--bg-panel</span>: <span class="c-str">#161614</span>;   <span class="c-comment">/* Sidebar y panels */</span>
+  <span class="c-key">--bg-elev</span>: <span class="c-str">#1d1d1a</span>;    <span class="c-comment">/* Elementos elevados (hover) */</span>
+
+  <span class="c-comment">/* Texto */</span>
+  <span class="c-key">--ink</span>: <span class="c-str">#f5f1e8</span>;        <span class="c-comment">/* Texto principal — blanco cálido */</span>
+  <span class="c-key">--ink-dim</span>: <span class="c-str">#8a857a</span>;    <span class="c-comment">/* Labels y texto secundario */</span>
+
+  <span class="c-comment">/* Acentos */</span>
+  <span class="c-key">--accent</span>: <span class="c-str">#d4ff3a</span>;      <span class="c-comment">/* Verde lima — color principal */</span>
+  <span class="c-key">--accent-warm</span>: <span class="c-str">#ff7a3d</span>; <span class="c-comment">/* Naranja — hover de botón secundario */</span>
+
+  <span class="c-comment">/* Bordes */</span>
+  <span class="c-key">--line</span>: <span class="c-str">#2a2a26</span>;        <span class="c-comment">/* Separadores y bordes */</span>
+  <span class="c-key">--grid</span>: <span class="c-str">rgba(212,255,58,0.06)</span>; <span class="c-comment">/* Grid de fondo — muy sutil */</span>
+}</pre>
+        </div>
+        <div class="tuneable-grid">
+          <div class="tuneable-item">
+            <div class="tuneable-name">--accent</div>
+            <div class="tuneable-desc">El color dominante. Cambia esto y cambia toda la personalidad visual.</div>
+            <div class="tuneable-example">Ej: <code>#00ffcc</code> para cian, <code>#ff3a6e</code> para rosa</div>
+          </div>
+          <div class="tuneable-item">
+            <div class="tuneable-name">--bg / --bg-panel</div>
+            <div class="tuneable-desc">Para versión clara: <code>--bg: #f8f6f0</code>, <code>--bg-panel: #ffffff</code>, <code>--ink: #1a1a18</code></div>
+            <div class="tuneable-example">Solo cambiando estos 3 tienes modo claro</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 THREE SETUP -->
+  <section id="three-setup">
+    <div class="section-tag">Bloque 02</div>
+    <h2>Three.js <em>setup</em></h2>
+    <p class="section-intro">
+      La inicialización del motor 3D. Aquí se crean los tres objetos fundamentales sin los cuales nada se ve: la <strong>escena</strong>, la <strong>cámara</strong> y el <strong>renderer</strong>.
+    </p>
+
+    <div class="block">
+      <div class="block-header" onclick="toggle(this)">
+        <div class="block-title">
+          <span class="block-num">02</span>
+          <span class="block-name">Escena, cámara y renderer</span>
+        </div>
+        <span class="block-arrow">▶</span>
+      </div>
+      <div class="block-body">
+        <div class="block-desc">
+          <strong>La escena</strong> es el contenedor de todo — objetos, luces, grilla. Piénsala como el "mundo".<br><br>
+          <strong>La cámara</strong> PerspectiveCamera simula visión humana: los objetos lejanos se ven más pequeños. Los parámetros son el ángulo de visión (45°), el aspect ratio, y los planos de recorte (qué tan cerca y lejos se renderiza).<br><br>
+          <strong>El renderer</strong> es el motor que convierte la escena en píxeles. <span class="highlight">antialias: true</span> suaviza los bordes — sin esto los bordes tienen dientes de sierra. <span class="highlight">alpha: true</span> hace el fondo transparente para que el CSS del body se vea a través.
+          <br><br>
+          <span class="highlight-warm">shadowMap</span> activa las sombras. PCFSoftShadowMap es el algoritmo de sombras suaves — más costoso que las sombras duras pero mucho más realista.
+        </div>
+        <div class="code-block">
+          <div class="code-label">JavaScript</div>
+          <pre><span class="c-comment">// Los tres objetos fundamentales</span>
+<span class="c-key">const</span> scene = <span class="c-key">new</span> <span class="c-fn">THREE.Scene</span>();
+scene.background = <span class="c-num">null</span>; <span class="c-comment">// transparente — el CSS maneja el fondo</span>
+
+<span class="c-key">const</span> camera = <span class="c-key">new</span> <span class="c-fn">THREE.PerspectiveCamera</span>(
+  <span class="c-num">45</span>,   <span class="c-comment">// FOV: ángulo de visión en grados</span>
+  <span class="c-num">1</span>,    <span class="c-comment">// aspect ratio (se actualiza en resize)</span>
+  <span class="c-num">0.1</span>, <span class="c-comment">// near: no renderiza más cerca de esto</span>
+  <span class="c-num">2000</span> <span class="c-comment">// far: no renderiza más lejos de esto</span>
+);
+camera.position.<span class="c-fn">set</span>(<span class="c-num">200</span>, <span class="c-num">180</span>, <span class="c-num">260</span>); <span class="c-comment">// posición inicial de la cámara</span>
+
+<span class="c-key">const</span> renderer = <span class="c-key">new</span> <span class="c-fn">THREE.WebGLRenderer</span>({
+  canvas,
+  antialias: <span class="c-num">true</span>,  <span class="c-comment">// bordes suaves</span>
+  alpha: <span class="c-num">true</span>       <span class="c-comment">// fondo transparente</span>
+});
+renderer.shadowMap.enabled = <span class="c-num">true</span>;
+renderer.shadowMap.type = <span class="c-fn">THREE.PCFSoftShadowMap</span>; <span class="c-comment">// sombras suaves</span></pre>
+        </div>
+        <div class="tuneable-grid">
+          <div class="tuneable-item">
+            <div class="tuneable-name">FOV (45)</div>
+            <div class="tuneable-desc">Ángulo de visión. Menor = más "telefoto" (objetos parecen más planos). Mayor = más distorsión tipo gran angular.</div>
+            <div class="tuneable-example">Prueba: <code>35</code> para más elegante, <code>60</code> para más dramático</div>
+          </div>
+          <div class="tuneable-item">
+            <div class="tuneable-name">camera.position</div>
+            <div class="tuneable-desc">Posición inicial de la cámara en el espacio 3D (x, y, z). Y es la altura.</div>
+            <div class="tuneable-example">Prueba: <code>set(0, 300, 0)</code> para vista cenital</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 LIGHTS -->
+  <section id="lights">
+    <div class="section-tag">Bloque 03</div>
+    <h2>Iluminación — <em>la magia del 3D</em></h2>
+    <p class="section-intro">
+      La iluminación es lo que hace que el modelo se vea sólido y tridimensional. Forja usa un esquema de tres luces clásico del cine — key, rim y fill — más una luz ambiente.
+    </p>
+
+    <div class="block">
+      <div class="block-header" onclick="toggle(this)">
+        <div class="block-title">
+          <span class="block-num">03</span>
+          <span class="block-name">Esquema de tres luces</span>
+        </div>
+        <span class="block-arrow">▶</span>
+      </div>
+      <div class="block-body">
+        <div class="block-desc">
+          <strong>AmbientLight</strong> — ilumina todo por igual, sin dirección. Evita que las sombras sean completamente negras. Con intensidad 0.35 es sutil.<br><br>
+          <strong>Key light (luz principal)</strong> — la luz dominante. Viene desde arriba y el lado. Genera las sombras principales. <span class="highlight">castShadow: true</span> la hace proyectar sombras.<br><br>
+          <strong>Rim light (contraluz)</strong> — posicionada detrás y al lado opuesto. Su color <span class="highlight">#d4ff3a</span> — el mismo verde del acento CSS — crea un halo que separa el objeto del fondo. Esto es lo que hace que el modelo "flote".<br><br>
+          <strong>Fill light (relleno)</strong> — naranja suave desde abajo, intensidad 0.15. Solo suaviza las sombras duras, casi no se nota directamente.
+        </div>
+        <div class="code-block">
+          <div class="code-label">JavaScript</div>
+          <pre><span class="c-comment">// Luz ambiente — base suave para todo</span>
+scene.<span class="c-fn">add</span>(<span class="c-key">new</span> <span class="c-fn">THREE.AmbientLight</span>(<span class="c-str">0xffffff</span>, <span class="c-num">0.35</span>));
+
+<span class="c-comment">// Key light — luz principal con sombras</span>
+<span class="c-key">const</span> key = <span class="c-key">new</span> <span class="c-fn">THREE.DirectionalLight</span>(<span class="c-str">0xffffff</span>, <span class="c-num">1.2</span>);
+key.position.<span class="c-fn">set</span>(<span class="c-num">120</span>, <span class="c-num">200</span>, <span class="c-num">80</span>);
+key.castShadow = <span class="c-num">true</span>;
+scene.<span class="c-fn">add</span>(key);
+
+<span class="c-comment">// Rim light — contraluz con color acento</span>
+<span class="c-key">const</span> rim = <span class="c-key">new</span> <span class="c-fn">THREE.DirectionalLight</span>(<span class="c-str">0xd4ff3a</span>, <span class="c-num">0.4</span>);
+rim.position.<span class="c-fn">set</span>(<span class="c-num">-100</span>, <span class="c-num">50</span>, <span class="c-num">-100</span>); <span class="c-comment">// lado opuesto a la key</span>
+scene.<span class="c-fn">add</span>(rim);
+
+<span class="c-comment">// Fill light — naranja suave desde abajo</span>
+<span class="c-key">const</span> fill = <span class="c-key">new</span> <span class="c-fn">THREE.DirectionalLight</span>(<span class="c-str">0xff7a3d</span>, <span class="c-num">0.15</span>);
+fill.position.<span class="c-fn">set</span>(<span class="c-num">80</span>, <span class="c-num">-50</span>, <span class="c-num">100</span>);
+scene.<span class="c-fn">add</span>(fill);</pre>
+        </div>
+        <div class="tuneable-grid">
+          <div class="tuneable-item">
+            <div class="tuneable-name">Color del rim light</div>
+            <div class="tuneable-desc">Cambiar <code>0xd4ff3a</code> cambia el halo del objeto. Es lo que le da la identidad cromática al preview 3D.</div>
+            <div class="tuneable-example">Prueba: <code>0x3ab8ff</code> para halo azul</div>
+          </div>
+          <div class="tuneable-item">
+            <div class="tuneable-name">Intensidades</div>
+            <div class="tuneable-desc">Key: 1.2 (dominante), Rim: 0.4, Fill: 0.15. Subir rim acerca la estética a producto de lujo.</div>
+            <div class="tuneable-example">Rim en <code>0.8</code> = efecto dramático</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 MATERIAL -->
+  <section id="material">
+    <div class="section-tag">Bloque 04</div>
+    <h2>Material — <em>cómo se ve la superficie</em></h2>
+    <p class="section-intro">
+      El material define cómo reacciona la superficie a la luz. MeshPhysicalMaterial es el más realista de Three.js — simula propiedades físicas reales como roughness (rugosidad) y clearcoat (barniz).
+    </p>
+
+    <div class="block">
+      <div class="block-header" onclick="toggle(this)">
+        <div class="block-title">
+          <span class="block-num">04</span>
+          <span class="block-name">MeshPhysicalMaterial</span>
+        </div>
+        <span class="block-arrow">▶</span>
+      </div>
+      <div class="block-body">
+        <div class="block-desc">
+          <span class="highlight">color: #e8e2d0</span> — un blanco hueso cálido. No blanco puro, porque el blanco puro con luces direccionales se ve artificial.<br><br>
+          <span class="highlight">roughness: 0.55</span> — qué tan rugosa es la superficie. 0 = espejo perfecto, 1 = completamente mate. 0.55 es como plástico fino o cerámica mate.<br><br>
+          <span class="highlight">metalness: 0.1</span> — cuánto se comporta como metal. 0.1 le da un leve brillo metálico sin hacer el objeto verse de metal.<br><br>
+          <span class="highlight">clearcoat: 0.2</span> — capa de barniz encima. Agrega un segundo lóbulo de reflexión, como si el objeto tuviera una capa de laca. ClearcoatRoughness 0.6 hace ese barniz mate, no brilloso.
+        </div>
+        <div class="code-block">
+          <div class="code-label">JavaScript</div>
+          <pre><span class="c-key">const</span> trayMaterial = <span class="c-key">new</span> <span class="c-fn">THREE.MeshPhysicalMaterial</span>({
+  color: <span class="c-str">0xe8e2d0</span>,          <span class="c-comment">// blanco hueso cálido</span>
+  roughness: <span class="c-num">0.55</span>,          <span class="c-comment">// semi-mate</span>
+  metalness: <span class="c-num">0.1</span>,           <span class="c-comment">// leve brillo metálico</span>
+  clearcoat: <span class="c-num">0.2</span>,           <span class="c-comment">// capa de barniz</span>
+  clearcoatRoughness: <span class="c-num">0.6</span>, <span class="c-comment">// barniz mate</span>
+});</pre>
+        </div>
+        <div class="tuneable-grid">
+          <div class="tuneable-item">
+            <div class="tuneable-name">color</div>
+            <div class="tuneable-desc">El color del objeto. Cambiarlo es trivial y transforma completamente la estética.</div>
+            <div class="tuneable-example"><code>0x2a2a2a</code> = carbón oscuro<br><code>0x4a90d9</code> = azul PLA</div>
+          </div>
+          <div class="tuneable-item">
+            <div class="tuneable-name">roughness + metalness</div>
+            <div class="tuneable-desc">Para simular materiales reales de impresión 3D:</div>
+            <div class="tuneable-example">PLA mate: <code>roughness: 0.8, metalness: 0</code><br>PETG: <code>roughness: 0.3, metalness: 0.05</code></div>
+          </div>
+          <div class="tuneable-item">
+            <div class="tuneable-name">clearcoat</div>
+            <div class="tuneable-desc">Para simular resina o acabado brillante: subir a 0.8 con clearcoatRoughness: 0.1</div>
+            <div class="tuneable-example">Resina: <code>clearcoat: 0.9, clearcoatRoughness: 0.05</code></div>
+          </div>
+          <div class="tuneable-item">
+            <div class="tuneable-name">MeshStandardMaterial</div>
+            <div class="tuneable-desc">Si el render es lento en hardware modesto, reemplaza Physical por Standard — menos parámetros, más rápido, muy similar visualmente.</div>
+            <div class="tuneable-example">Quita clearcoat y clearcoatRoughness</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 GEOMETRY -->
+  <section id="geometry">
+    <div class="section-tag">Bloque 05</div>
+    <h2>Geometría — <em>el corazón del proyecto</em></h2>
+    <p class="section-intro">
+      Aquí es donde el código construye el modelo 3D. Es la parte más interesante y la más original — no usa primitivas de Three.js sino que construye las formas desde cero usando extrusión de perfiles 2D.
+    </p>
+
+    <div class="block">
+      <div class="block-header" onclick="toggle(this)">
+        <div class="block-title">
+          <span class="block-num">05a</span>
+          <span class="block-name">roundedRectShape — el perfil con esquinas</span>
+        </div>
+        <span class="block-arrow">▶</span>
+      </div>
+      <div class="block-body">
+        <div class="block-desc">
+          Esta función dibuja un rectángulo con esquinas redondeadas en 2D usando <strong>THREE.Shape</strong> — el equivalente 3D de un path SVG. Las esquinas se hacen con <span class="highlight">quadraticCurveTo</span> — curvas de Bézier cuadráticas.<br><br>
+          La línea crítica: <code>r = Math.min(r, Math.min(w, h) / 2 - 0.01)</code> — limita el radio para que nunca exceda la mitad del lado más corto. Sin esto, si pones un radio muy grande la forma se deforma.
+        </div>
+        <div class="diagram">
+          <div class="diagram-title">Proceso de construcción</div>
+          <div class="flow">
+            <div class="flow-step hi">Shape 2D</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">ExtrudeGeometry</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step hi">Mesh 3D</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">mergeGeometries</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step hi">STL</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-header" onclick="toggle(this)">
+        <div class="block-title">
+          <span class="block-num">05b</span>
+          <span class="block-name">buildTray — ensamblado de piezas</span>
+        </div>
+        <span class="block-arrow">▶</span>
+      </div>
+      <div class="block-body">
+        <div class="block-desc">
+          La bandeja se construye como un conjunto de piezas separadas que luego se fusionan:<br><br>
+          <strong>1. Base</strong> — el fondo sólido. Siempre existe.<br>
+          <strong>2. Paredes</strong> — se crean con un truco elegante: un shape exterior con un shape interior como "hole" (agujero). ExtrudeGeometry extruye esa forma anular, creando las paredes huecas de una sola operación.<br>
+          <strong>3. Divisores</strong> — rectángulos delgados extruidos dentro del espacio interior.<br><br>
+          <span class="highlight">Modo placa</span> — si el alto es menor o igual a la base, la app detecta que es una placa sólida y desactiva paredes y divisores automáticamente. Esto es un comportamiento emergente, no un switch manual.<br><br>
+          <span class="highlight-warm">mergeGeometries</span> — al final fusiona todas las piezas en una sola geometría. Esto es crítico para el STL — si no se fusiona, el archivo tendría geometrías separadas que algunos slicers no manejan bien.
+        </div>
+        <div class="code-block">
+          <div class="code-label">JavaScript — la lógica del modo placa</div>
+          <pre><span class="c-comment">// Si alto <= base, es una placa sólida</span>
+<span class="c-key">const</span> isPlate = p.alto <= p.base;
+
+<span class="c-comment">// Las paredes solo existen si hay altura real</span>
+<span class="c-key">if</span> (!isPlate && wallHeight > <span class="c-num">0.1</span>) {
+  <span class="c-comment">// Shape exterior con hole interior = pared hueca</span>
+  <span class="c-key">const</span> wallShape = <span class="c-fn">roundedRectShape</span>(p.largo, p.ancho, p.radio);
+  <span class="c-key">const</span> innerShape = <span class="c-fn">roundedRectShape</span>(
+    p.largo - <span class="c-num">2</span>*p.pared,
+    p.ancho - <span class="c-num">2</span>*p.pared,
+    innerR
+  );
+  wallShape.holes.<span class="c-fn">push</span>(innerShape); <span class="c-comment">// el hueco</span>
+}</pre>
+        </div>
+        <div class="callout">
+          <strong>¿Por qué extrusión y no primitivas?</strong><br>
+          Three.js tiene BoxGeometry, pero una caja es sólida. Una bandeja tiene paredes huecas, esquinas redondeadas y divisores. Construirla con extrusión de shapes 2D permite cualquier forma imaginable — solo cambia el Shape.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 ORBITCONTROLS -->
+  <section id="controls">
+    <div class="section-tag">Bloque 06</div>
+    <h2>OrbitControls — <em>por qué el movimiento es tan suave</em></h2>
+    <p class="section-intro">
+      Esta es la respuesta a tu pregunta. El movimiento suave no es magia — son tres líneas de configuración de OrbitControls.
+    </p>
+
+    <div class="block">
+      <div class="block-header" onclick="toggle(this)">
+        <div class="block-title">
+          <span class="block-num">06</span>
+          <span class="block-name">Damping — la física del freno</span>
+        </div>
+        <span class="block-arrow">▶</span>
+      </div>
+      <div class="block-body">
+        <div class="block-desc">
+          <span class="highlight">enableDamping: true</span> — activa la inercia. Sin esto, cuando sueltas el mouse la rotación se detiene instantáneamente. Con damping, la cámara desacelera gradualmente, como si estuviera en un líquido viscoso.<br><br>
+          <span class="highlight">dampingFactor: 0.08</span> — qué tan rápido frena. Es un valor entre 0 y 1. Valores bajos (0.03–0.08) = muy suave, inercia larga. Valores altos (0.3–0.5) = frena rápido, casi sin inercia.<br><br>
+          <strong>La condición crítica</strong>: el damping solo funciona si llamas a <code>controls.update()</code> en cada frame del loop de animación. Si lo olvidas, la cámara no se mueve.
+        </div>
+        <div class="code-block">
+          <div class="code-label">JavaScript</div>
+          <pre><span class="c-key">const</span> controls = <span class="c-key">new</span> <span class="c-fn">OrbitControls</span>(camera, canvas);
+controls.enableDamping = <span class="c-num">true</span>;      <span class="c-comment">// activa la inercia</span>
+controls.dampingFactor = <span class="c-num">0.08</span>;     <span class="c-comment">// suavidad del freno</span>
+controls.target.<span class="c-fn">set</span>(<span class="c-num">0</span>, <span class="c-num">15</span>, <span class="c-num">0</span>);    <span class="c-comment">// punto hacia donde mira la cámara</span>
+
+<span class="c-comment">// En el loop de animación — OBLIGATORIO para el damping</span>
+<span class="c-key">function</span> <span class="c-fn">animate</span>() {
+  controls.<span class="c-fn">update</span>(); <span class="c-comment">// ← sin esto no hay suavidad</span>
+  renderer.<span class="c-fn">render</span>(scene, camera);
+  <span class="c-fn">requestAnimationFrame</span>(animate);
+}</pre>
+        </div>
+        <div class="tuneable-grid">
+          <div class="tuneable-item">
+            <div class="tuneable-name">dampingFactor</div>
+            <div class="tuneable-desc">El parámetro de suavidad. Es lo primero que ajustar si quieres más o menos inercia.</div>
+            <div class="tuneable-example"><code>0.03</code> = muy fluido, lento<br><code>0.15</code> = más responsivo</div>
+          </div>
+          <div class="tuneable-item">
+            <div class="tuneable-name">target</div>
+            <div class="tuneable-desc">El punto al que orbita la cámara. Se actualiza dinámicamente cuando cambia el alto del modelo.</div>
+            <div class="tuneable-example">Se recalcula en <code>updateMesh()</code></div>
+          </div>
+        </div>
+        <div class="callout warm">
+          <strong>requestAnimationFrame</strong> — el loop de animación no corre a velocidad fija. El browser lo sincroniza con la pantalla (60fps, 120fps según el monitor) y lo pausa cuando la pestaña está oculta. Esto es eficiente y es por qué no consume CPU innecesariamente.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 07 UI -->
+  <section id="ui">
+    <div class="section-tag">Bloque 07</div>
+    <h2>UI — <em>sliders conectados al modelo</em></h2>
+    <p class="section-intro">
+      El sistema de UI es deliberadamente simple: sliders HTML nativos conectados al modelo 3D mediante event listeners. Sin frameworks, sin state management.
+    </p>
+
+    <div class="block">
+      <div class="block-header" onclick="toggle(this)">
+        <div class="block-title">
+          <span class="block-num">07</span>
+          <span class="block-name">Event listeners y reactividad</span>
+        </div>
+        <span class="block-arrow">▶</span>
+      </div>
+      <div class="block-body">
+        <div class="block-desc">
+          Cada slider tiene un ID. Un array con todos los IDs permite registrar los listeners en un loop en lugar de repetir código 8 veces.<br><br>
+          Cuando el usuario mueve un slider, el listener llama a <span class="highlight">updateMesh()</span> que: lee todos los parámetros, destruye el mesh anterior, construye uno nuevo, y lo agrega a la escena. Todo en milisegundos.<br><br>
+          <span class="highlight-warm">Destruir y reconstruir</span> en lugar de modificar la geometría existente es una decisión de simplicidad. Modificar geometrías en Three.js es más complejo. Para este caso de uso — modelos pequeños, interacción fluida — el enfoque funciona perfectamente.
+        </div>
+        <div class="code-block">
+          <div class="code-label">JavaScript</div>
+          <pre><span class="c-comment">// Un loop para registrar todos los listeners</span>
+<span class="c-key">const</span> inputs = [<span class="c-str">'largo'</span>,<span class="c-str">'ancho'</span>,<span class="c-str">'alto'</span>,<span class="c-str">'pared'</span>,<span class="c-str">'base'</span>,<span class="c-str">'radio'</span>,<span class="c-str">'divx'</span>,<span class="c-str">'divy'</span>];
+
+inputs.<span class="c-fn">forEach</span>(id => {
+  <span class="c-key">const</span> el = document.<span class="c-fn">getElementById</span>(id);
+  el.<span class="c-fn">addEventListener</span>(<span class="c-str">'input'</span>, () => {
+    <span class="c-comment">// Actualiza el número visible en el label</span>
+    valEl.textContent = el.step.includes(<span class="c-str">'.'</span>)
+      ? <span class="c-fn">parseFloat</span>(el.value).<span class="c-fn">toFixed</span>(<span class="c-num">1</span>)
+      : el.value;
+    <span class="c-fn">updateMesh</span>(); <span class="c-comment">// reconstruye el modelo</span>
+  });
+});</pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 08 STL -->
+  <section id="stl">
+    <div class="section-tag">Bloque 08</div>
+    <h2>Exportar <em>STL</em></h2>
+    <p class="section-intro">
+      La exportación STL ocurre completamente en el browser — sin servidor, sin upload. El archivo se genera en memoria y se descarga directamente.
+    </p>
+
+    <div class="block">
+      <div class="block-header" onclick="toggle(this)">
+        <div class="block-title">
+          <span class="block-num">08</span>
+          <span class="block-name">STLExporter y descarga local</span>
+        </div>
+        <span class="block-arrow">▶</span>
+      </div>
+      <div class="block-body">
+        <div class="block-desc">
+          <strong>STLExporter</strong> de Three.js convierte el mesh actual en un archivo STL binario. <span class="highlight">binary: true</span> genera formato binario — más pequeño y más compatible con slicers que el formato ASCII.<br><br>
+          El truco de la descarga: se crea un <strong>Blob</strong> (objeto binario en memoria), se genera una URL temporal con <span class="highlight">URL.createObjectURL</span>, se crea un link invisible, se hace click programáticamente, y luego se libera la URL. Todo en el browser, cero servidores.<br><br>
+          El nombre del archivo incluye las dimensiones: <code>bandeja_150x100x30_r8.stl</code> — así el archivo es auto-descriptivo.
+        </div>
+        <div class="code-block">
+          <div class="code-label">JavaScript</div>
+          <pre><span class="c-key">const</span> exporter = <span class="c-key">new</span> <span class="c-fn">STLExporter</span>();
+<span class="c-key">const</span> stl = exporter.<span class="c-fn">parse</span>(currentMesh, { binary: <span class="c-num">true</span> });
+
+<span class="c-comment">// Crear archivo en memoria y descargar</span>
+<span class="c-key">const</span> blob = <span class="c-key">new</span> <span class="c-fn">Blob</span>([stl], { type: <span class="c-str">'application/octet-stream'</span> });
+<span class="c-key">const</span> url = URL.<span class="c-fn">createObjectURL</span>(blob);
+<span class="c-key">const</span> a = document.<span class="c-fn">createElement</span>(<span class="c-str">'a'</span>);
+a.href = url;
+a.download = <span class="c-str">`bandeja_${p.largo}x${p.ancho}x${p.alto}_r${p.radio}.stl`</span>;
+a.<span class="c-fn">click</span>();
+URL.<span class="c-fn">revokeObjectURL</span>(url); <span class="c-comment">// liberar memoria</span></pre>
+        </div>
+        <div class="callout blue">
+          <strong>¿Por qué binario y no ASCII?</strong><br>
+          El STL ASCII es texto legible pero puede ser 5–10x más grande. Los slicers modernos (Bambu Studio, PrusaSlicer, Cura) manejan binario perfectamente y es el formato estándar para intercambio.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TUNEABLE -->
+  <section id="tuneable">
+    <div class="section-tag">Personalización</div>
+    <h2>Qué puedes <em>cambiar</em></h2>
+    <p class="section-intro">
+      Resumen rápido de las modificaciones más impactantes, ordenadas de menor a mayor complejidad.
+    </p>
+
+    <table class="props-table">
+      <tr><th>Cambio</th><th>Dónde</th><th>Impacto</th><th>Complejidad</th></tr>
+      <tr>
+        <td>Color del acento</td>
+        <td><code>--accent</code> en :root</td>
+        <td>Toda la UI cambia de color</td>
+        <td>★☆☆</td>
+      </tr>
+      <tr>
+        <td>Color del objeto 3D</td>
+        <td><code>color: 0xe8e2d0</code> en trayMaterial</td>
+        <td>El modelo cambia de color</td>
+        <td>★☆☆</td>
+      </tr>
+      <tr>
+        <td>Suavidad del movimiento</td>
+        <td><code>dampingFactor</code> en OrbitControls</td>
+        <td>Más o menos inercia al rotar</td>
+        <td>★☆☆</td>
+      </tr>
+      <tr>
+        <td>Modo claro</td>
+        <td>3 variables en :root</td>
+        <td>Toda la app en tema claro</td>
+        <td>★★☆</td>
+      </tr>
+      <tr>
+        <td>Acabado del material</td>
+        <td>roughness, metalness, clearcoat</td>
+        <td>Simular PLA, PETG, resina</td>
+        <td>★★☆</td>
+      </tr>
+      <tr>
+        <td>Rangos de los sliders</td>
+        <td>atributos min/max/step en HTML</td>
+        <td>Cambiar límites paramétricos</td>
+        <td>★★☆</td>
+      </tr>
+      <tr>
+        <td>Nueva forma de base</td>
+        <td>función roundedRectShape</td>
+        <td>Formas hexagonales, elípticas</td>
+        <td>★★★</td>
+      </tr>
+      <tr>
+        <td>Agujeros de drenaje</td>
+        <td>buildTray — agregar holes a la base</td>
+        <td>Funcionalidad nueva</td>
+        <td>★★★</td>
+      </tr>
+    </table>
+  </section>
+
+  <footer>
+    <span>Forja.</span> · Guía de código · generada con Claude
+    <span style="color:var(--ink-dim)">markvonwaffen.github.io</span>
+  </footer>
+
+</main>
+
+<script>
+function toggle(header) {
+  const block = header.closest('.block');
+  block.classList.toggle('open');
+}
+
+// Nav active state on scroll
+const sections = document.querySelectorAll('section, .hero, #overview');
+const links = document.querySelectorAll('.nav-link');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      links.forEach(l => l.classList.remove('active'));
+      const id = entry.target.id;
+      const active = document.querySelector(`.nav-link[href="#${id}"]`);
+      if (active) active.classList.add('active');
+    }
+  });
+}, { threshold: 0.3 });
+
+document.querySelectorAll('section[id], #overview').forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
